@@ -18,12 +18,15 @@ To deplot locally:
 
 Using [AWS EC2](https://github.com/mgckind/container_demo.git) services 
 
-After deploying an EC2 instance:
+After deploying an EC2 instance, install docker (There are other pre-installed options, or even [Beanstalk](https://aws.amazon.com/elasticbeanstalk/)):
 
     sudo yum update -y
     sudo yum install -y docker git
     sudo service docker start
     sudo usermod -aG docker ec2-user
+
+You can either pull a repository and build the image or ise the DockeHub registry to get images
+
 
 ## Deployment -- the less simple way but still easy
 
