@@ -18,6 +18,13 @@ To deplot locally:
 
 Using [AWS EC2](https://github.com/mgckind/container_demo.git) services 
 
+After deploying an EC2 instance:
+
+    sudo yum update -y
+    sudo yum install -y docker git
+    sudo service docker start
+    sudo usermod -aG docker ec2-user
+
 ## Deployment -- the less simple way but still easy
 
 Using [Kubernetes](https://kubernetes.io/), note that GKE and AWS provide Kubernetes cluster as a Service.
