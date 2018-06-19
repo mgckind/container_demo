@@ -11,7 +11,14 @@ Two containers are created, one contains a simple SQL DB and another simple inte
 
 To deplot locally:
 
-    docker run --name <NAME>  -p <PORT>:3306 -e MYSQL_ROOT_PASSWORD=<PASSWORD> -d mysql:5.6
+    docker run --name <NAME_MYSQL>  -p <PORT>:3306 -e MYSQL_ROOT_PASSWORD=<PASSWORD> -d mysql:5.6
+
+### Deploy the front-end
+
+To deploy locally:
+    
+    docker run -d -p 8080:8080  --link <NAME_MYSQL>:remote-mysql mgckind:demo
+
 
 
 ## Deployment -- the simple way
