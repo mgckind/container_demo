@@ -8,18 +8,23 @@ import gviz_api
 import MySQLdb as mydb
 import os
 
+# Configuration parameters to connect to MYSQL
 CONF={}
 CONF['host'] = 'remote-mysql' #'127.0.0.1' 
 CONF['port'] = int('3306')
 CONF['user'] = os.environ['MYSQL_USER']
 CONF['passwd'] = os.environ['MYSQL_PASS']
 
+# schema for google pie chart
 schema = {"topic": ("string", "Topic"), "times": ("number", "Times")}
-#data = [{"topic": "work", "times": 1}, {"topic": "sleep", "times": 2}]
 
+# will run by default on port 8080
 define("port", default=8080, help="run on the given port", type=int)
 
 def init_table():
+    """
+    Create the database and the topics table if not existing
+    """
     con = mydb.connect(**CONF)
     cur = con.cursor()
     try:
@@ -43,6 +48,9 @@ def init_table():
     con.close()
 
 def add_topic(topic, new=False):
+    """
+    Increase the topic mention by 1, add antry to the records
+    """
     con = mydb.connect(**CONF)
     con.select_db('demo')
     cur = con.cursor()
@@ -57,6 +65,7 @@ def add_topic(topic, new=False):
     con.close()
 
 def get_data():
+    " THE function to get the data"
     con = mydb.connect(**CONF)
     con.select_db('demo')
     cur = con.cursor()
@@ -90,7 +99,6 @@ class AddDataHandler(tornado.web.RequestHandler):
         if topictxt is not '':
             add_topic(topictxt.lower(), new=True)
         self.redirect('/')
-        #self.render("main.html", hostname=platform.node())
         
 
 class Application(tornado.web.Application):
