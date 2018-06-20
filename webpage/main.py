@@ -98,7 +98,7 @@ class AddDataHandler(tornado.web.RequestHandler):
             add_topic(topic)
         if topictxt is not '':
             add_topic(topictxt.lower(), new=True)
-        self.redirect('/')
+        self.redirect('/demo/')
         
 
 class Application(tornado.web.Application):
@@ -109,8 +109,9 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
             (r"/", MainHandler),
-            (r"/getdata", GetDataHandler),
-            (r"/add", AddDataHandler),
+            (r"/demo/?", MainHandler),
+            (r"/demo/getdata", GetDataHandler),
+            (r"/demo/add", AddDataHandler),
             ]
         settings = {
             "template_path": Settings.TEMPLATE_PATH,

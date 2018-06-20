@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-app
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+  selector:
+    app: demo-app
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: demo-app
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: demo-app
+    spec:
+      containers:
+      - image: mgckind/my-demo-app:kube-1.0
+        imagePullPolicy: IfNotPresent
+        name: demo-app
+        env:
+        - name: MYSQL_PASS
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: passwd
+        - name: MYSQL_USER
+          value: "root" ## <---- 
+        ports:
+        - containerPort: 8080
+          name: demo-app

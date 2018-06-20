@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: remote-mysql
+spec:
+  type: NodePort
+  ports:
+    - port: 3306
+  selector:
+    app: mysql
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: mysql:5.6
+        imagePullPolicy: IfNotPresent
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: passwd
+        ports:
+        - containerPort: 3306
+          name: mysql

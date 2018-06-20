@@ -8,7 +8,7 @@
 
       function drawChart() {
           var jsonData = $.ajax({
-          url: "/getdata",
+          url: "/demo/getdata",
           dataType: "json",
           async: false
           }).responseText;
@@ -31,7 +31,7 @@
       </b>
 
 
-<form action="/add">
+<form action="/demo/add">
   <p>What is my favorite language?:</p>
   <div>
     <input type="radio" id="contactChoice1"

@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+ name: demo-app
+ annotations:
+   #ingress.kubernetes.io/ssl-redirect: "false"
+   kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - http:
+     paths:
+     - path: /demo
+       backend:
+         serviceName: demo-app
+         servicePort: 8080
+
