@@ -9,10 +9,10 @@ import MySQLdb as mydb
 import os
 
 CONF={}
-CONF['host'] = '127.0.0.1' #'remote-mysql'
-CONF['port'] = int('33060')
-CONF['user'] = 'root' #'os.environ['MYSQL_USER']
-CONF['passwd'] =  'poto' #= os.environ['MYSQL_PASS']
+CONF['host'] = 'remote-mysql' #'127.0.0.1' 
+CONF['port'] = int('3306')
+CONF['user'] = os.environ['MYSQL_USER']
+CONF['passwd'] = os.environ['MYSQL_PASS']
 
 schema = {"topic": ("string", "Topic"), "times": ("number", "Times")}
 #data = [{"topic": "work", "times": 1}, {"topic": "sleep", "times": 2}]
