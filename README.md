@@ -66,17 +66,27 @@ Since we will use links internally, there is no need to expose the port (its mor
     docker run --name demo-mysql -v $PWD/data/:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=<PASSWD> -d mysql:5.6
     
     
-> Note that by default the containers **run as root** which is a terrible idea. :shrug: 
+> Note that by default the containers **run as root** which is a terrible idea. :grimacing: 
 
 ### Deploy the front-end
 
-To deploy locally:
+Let's build the front end:
+
+    docker build -t webapp webpage/.
+
+To deploy locally, we need to link to `demo-mysql` and add environmental variables with `-e`:
     
-    docker run -d -p 8080:8080  --link <NAME_MYSQL>:remote-mysql mgckind:demo
+    docker run --name my-first-app -d -p 8080:8080 --link demo-mysql:remote-mysql -e MYSQL_USER=root -e MYSQL_PASS=<PASSWORD> webapp
+
+Let's get inside the container:
+
+    docker exec -it my-first-app bash
+    
+Exercise: Let's modify the `website/template/main.html` and re-deploy.
 
 
 
-## Deployment -- the simple way
+## Deployment on AWS
 
 Using [AWS EC2](https://github.com/mgckind/container_demo.git) services 
 
@@ -87,7 +97,25 @@ After deploying an EC2 instance, install docker (There are other pre-installed o
     sudo service docker start
     sudo usermod -aG docker ec2-user
 
-You can either pull a repository and build the image or ise the DockeHub registry to get images
+You can either pull a repository and build the images or use the DockeHub registry to get images. Let's try the latter:
+
+We need to push the tag and push the images, (only webapp):
+
+    docker tag webapp mgckind/my-demo-app:1.0.0
+    
+Then we need to login to the Hub:
+
+    docker login
+    
+and push the image:
+
+    docker push mgckind/my-demo-app:1.0.0
+    
+Login to AWS, launch an instance, install docker, pull the images and repeat the steps above
+
+In this case you need to expose 8080 to 80 and use the correct image name
+
+    docker run --name my-first-app -d -p 80:8080 --link demo-mysql:remote-mysql -e MYSQL_USER=root -e MYSQL_PASS=<PASSWORD> mgckind/my-demo-app:1.0.0
 
 
 ## Deployment -- the less simple way but still easy
