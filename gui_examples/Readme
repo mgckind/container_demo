@@ -1,0 +1,3 @@
+sudo docker build -t firefox .
+sudo xhost +
+sudo docker run -it --rm -e DISPLAY=$DISPLAY -e XAUTHORITY=$XAUTHORITY -v /tmp/.X11-unix:/tmp/.X11-unix firefox
