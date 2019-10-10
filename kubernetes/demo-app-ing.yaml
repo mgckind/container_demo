@@ -4,7 +4,7 @@ metadata:
  name: demo-app
  annotations:
    #ingress.kubernetes.io/ssl-redirect: "false"
-   kubernetes.io/ingress.class: "nginx"
+   kubernetes.io/ingress.class: "deslabs"
 spec:
   rules:
   - http:
@@ -12,5 +12,5 @@ spec:
      - path: /demo
        backend:
          serviceName: demo-app
-         servicePort: 8080
+         servicePort: 8081
 

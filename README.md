@@ -95,7 +95,7 @@ Let's build the front end:
 
 To deploy locally, we need to link to `demo-mysql` and add environmental variables with `-e`:
 
-    docker run --name my-first-app -d -p 8080:8080 --link demo-mysql:remote-mysql -e MYSQL_USER=root -e MYSQL_PASS=<PASSWORD> webapp
+    docker run --name my-first-app -d -p 8080:8080 --link demo-mysql:remote-mysql -e MYSQL_USER=root -e MYSQL_PASS=<PASSWORD> -e MYSQL_SERVER=remote-mysql webapp
 
 Now you can access in your browser at [http://localhost:8080](http://localhost:8080)
 
@@ -139,6 +139,6 @@ In this case you need to expose 8080 to 80 and use the correct image name
     docker run --name my-first-app -d -p 80:8080 --link demo-mysql:remote-mysql -e MYSQL_USER=root -e MYSQL_PASS=<PASSWORD> mgckind/my-demo-app:1.0.0
 
 
-## Deployment -- the less simple way but still easy
+## Deployment on Kubernetes -- the less simple way but still easy
 
-Using [Kubernetes](https://kubernetes.io/), note that GKE and AWS provide Kubernetes cluster as a Service.
+Using [Kubernetes](https://kubernetes.io/), note that GKE and AWS provide Kubernetes cluster as a Service. See [folder](kubernetes/)

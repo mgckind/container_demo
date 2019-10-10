@@ -1,4 +1,42 @@
 apiVersion: v1
+kind: Secret
+data:
+  passwd: bGluZWE=
+metadata:
+  name: mysql-secret
+  namespace: default
+type: Opaque
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: remote-mysql
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 30Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /home/matias/kubedata/external/demo_mysql
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: remote-mysql
+  namespace: default
+spec: 
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 30Gi
+  volumeName: remote-mysql
+
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: remote-mysql
@@ -9,13 +47,14 @@ spec:
   selector:
     app: mysql
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
 spec:
-  strategy:
-    type: Recreate
+  selector:
+    matchLabels:
+      app: mysql
   template:
     metadata:
       labels:
@@ -34,3 +73,11 @@ spec:
         ports:
         - containerPort: 3306
           name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: remote-mysql
+

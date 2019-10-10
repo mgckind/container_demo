@@ -10,16 +10,16 @@ import os
 
 # Configuration parameters to connect to MYSQL
 CONF={}
-CONF['host'] = 'remote-mysql' #'127.0.0.1' 
-CONF['port'] = int('3306')
+CONF['host'] = os.environ['MYSQL_SERVER'] # 'remote-mysql' #'127.0.0.1' 
+CONF['port'] = int('3306') # 3306
 CONF['user'] = os.environ['MYSQL_USER']
 CONF['passwd'] = os.environ['MYSQL_PASS']
 
 # schema for google pie chart
 schema = {"topic": ("string", "Topic"), "times": ("number", "Times")}
 
-# will run by default on port 8080
-define("port", default=8080, help="run on the given port", type=int)
+# will run by default on port 8081
+define("port", default=8081, help="run on the given port", type=int)
 
 def init_table():
     """
@@ -78,6 +78,7 @@ def get_data():
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
+        init_table()
         self.render("main.html", hostname=platform.node())
 
 class GetDataHandler(tornado.web.RequestHandler):

@@ -5,24 +5,25 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 8080
+    - port: 8081
   selector:
     app: demo-app
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: demo-app
 spec:
-  strategy:
-    type: Recreate
+  selector:
+    matchLabels:
+      app: demo-app
   template:
     metadata:
       labels:
         app: demo-app
     spec:
       containers:
-      - image: mgckind/my-demo-app:kube-1.0
+      - image: mgckind/demo-app-pie:1.1
         imagePullPolicy: IfNotPresent
         name: demo-app
         env:
@@ -33,6 +34,10 @@ spec:
               key: passwd
         - name: MYSQL_USER
           value: "root" ## <---- 
+        - name: MYSQL_SERVER
+          value: "remote-mysql"
+        - name: MYSQL_PORT
+          value: "3306" 
         ports:
-        - containerPort: 8080
+        - containerPort: 8081
           name: demo-app
