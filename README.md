@@ -95,7 +95,7 @@ Let's build the front end:
 
 To deploy locally, we need to link to `demo-mysql` and add environmental variables with `-e`:
 
-    docker run --name my-first-app -d -p 8080:8080 --link demo-mysql:remote-mysql -e MYSQL_USER=root -e MYSQL_PASS=<PASSWORD> -e MYSQL_SERVER=remote-mysql webapp
+    docker run --name my-first-app -d -p 8080:8081 --link demo-mysql:remote-mysql -e MYSQL_USER=root -e MYSQL_PASS=<PASSWORD> -e MYSQL_SERVER=remote-mysql webapp
 
 Now you can access in your browser at [http://localhost:8080](http://localhost:8080)
 
