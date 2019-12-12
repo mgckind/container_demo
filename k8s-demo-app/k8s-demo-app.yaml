@@ -1,0 +1,99 @@
+---
+  # Define ingress controller
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: demo-app
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+     paths:
+     - path: /demo
+       backend:
+         serviceName: demo-app
+         servicePort: 8080
+# Define services
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-app
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+  selector:
+    app: demo-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-app-db
+spec:
+  type: NodePort
+  ports:
+  - port: 3306
+  selector:
+    app: demo-app-db
+---
+# Define deployments
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-app
+  template:
+    metadata:
+      labels:
+        app: demo-app
+    spec:
+      containers:
+      - image: k8s-demo-app:latest
+        imagePullPolicy: IfNotPresent
+        name: demo-app
+        env:
+        - name: HTTP_PORT
+          value: "8080"
+        - name: MYSQL_PASS
+          value: "password"
+        - name: MYSQL_USER
+          value: "root"
+        - name: MYSQL_SERVER
+          value: "demo-app-db"
+        - name: MYSQL_PORT
+          value: "3306"
+        ports:
+        - containerPort: 8080
+          name: demo-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-app-db
+spec:
+  selector:
+    matchLabels:
+      app: demo-app-db
+  template:
+    metadata:
+      labels:
+        app: demo-app-db
+    spec:
+      containers:
+      - image: mysql:5.6
+        imagePullPolicy: IfNotPresent
+        name: demo-app-db
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "password"
+        ports:
+        - containerPort: 3306
+          name: demo-app-db
